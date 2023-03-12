@@ -1,0 +1,19 @@
+1) create table if not exists bits_online_retail (record_no int, invoice int, stock_code string, description string, quantity int, invoice_date date, invoice_time timestamp, price float, customer int, country string) row format delimited fields terminated by ',' lines terminated by '\n' STORED AS TEXTFILE;
+
+2) LOAD DATA INPATH '/anurag/Assignment_2_2023_BDS_DATA_SET_online_retail_data.csv' INTO TABLE bits_online_retail;
+
+3) sudo -u hdfs hdfs dfs -chown hive:hive /anurag
+
+4) select country, count(distinct customer) as no_of_unique_customers from bits_online_retail where customer is not null group by country;
+
+5) select country, sum(quantity*price) as max_revenue from bits_online_retail where month(invoice_date)=3 and year(invoice_date)=2010 group by country order by max_revenue desc limit 1;
+
+6) select month(invoice_date) as month, sum(quantity) as no_of_items_sold from bits_online_retail where year(invoice_date)=2010 group by month(invoice_date) order by no_of_items_sold desc limit 1;
+
+7) select country as country, sum(quantity) as no_of_items_sold from bits_online_retail where month(invoice_date)=1 and year(invoice_date)=2010 group by country order by no_of_items_sold desc limit 1;
+
+8) select stock_code as stock_code, country as country, sum(quantity) as no_of_items_sold from bits_online_retail where year(invoice_date)=2010 and country="Japan" group by stock_code, country order by no_of_items_sold desc limit 1;
+
+9) select stock_code as stock_code, sum(quantity*price) as max_revenue_generated from bits_online_retail where year(invoice_date)=2010 and month(invoice_date)=12 group by stock_code order by max_revenue_generated desc limit 1;
+
+10) select country as country, sum(quantity) as no_of_items_sold from bits_online_retail where year(invoice_date)=2010 group by country order by no_of_items_sold asc limit 1;
